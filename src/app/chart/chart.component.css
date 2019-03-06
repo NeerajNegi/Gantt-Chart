@@ -1,0 +1,46 @@
+.chart {
+    width: 95vw;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-gap: 0.5rem;
+}
+
+.menu {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-rows: 10% 90%;
+}
+
+.draw-area {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: bisque;
+}
+
+.search-box {
+    padding: 0.5rem;
+}
+
+.search-input {
+    background-color: #F7F9FD;
+    border: none;
+    border: #E8EFFD solid 1px;
+    border-radius: 5px;
+    color: #7E8A95;
+    height: 5vh;
+    font-size: 0.8rem;
+    width: 98%;
+    text-indent: 5%;
+}
+
+.projects-wrapper {
+    background-color: black;
+}
+
+.project {
+    width: 100%;
+}
