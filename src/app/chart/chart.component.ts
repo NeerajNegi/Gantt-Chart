@@ -45,7 +45,8 @@ export class ChartComponent implements OnInit {
     this.ChartHeight = this.Chart[0][0].offsetHeight;
     this.ChartWidth = this.Chart[0][0].offsetWidth;
     this.DrawAreaSvgHeight = 500;
-    this.DrawAreaSvgWidth = 1000;
+    //Change this DrawAreaSvgWidth according to Months length
+    // this.DrawAreaSvgWidth = 1000;
     
     //Pre-process data
     this.GlobalEndDate = config.data[0].milestones[0].tasks[0].end_date;
@@ -55,6 +56,7 @@ export class ChartComponent implements OnInit {
     //Create Blocks and helper data
     this.createBlocks();
     this.Months = this.getMonths(this.GlobalStartDate, this.GlobalEndDate);
+    this.DrawAreaSvgWidth = this.Months.length * 50;
     this.SubHeaderRanges = this.getMonthsRange();
     console.log(this.Months);
     this.DateBoundary.push(moment(this.Months[0], 'MMM YYYY').startOf('month').toDate());
@@ -70,6 +72,7 @@ export class ChartComponent implements OnInit {
 
     this.createChart();
 
+    this.appendProjects();
   }
 
   createBlocks() {
@@ -136,10 +139,34 @@ export class ChartComponent implements OnInit {
       .attr('class', function(d) {
         return "dates Date-" + moment(d.start_date).format("MMYYYY")
     });
-    // this.DrawAreaSvg.append('g')
-    //   .append('text')
+    
   }
 
+  appendProjects() {
+    config.data.forEach( (d,i) => {
+      console.log(d);
+      let Project = this.ProjectsWrapper
+        .append('div')
+        .attr('class', 'project');
+      
+      let Button = Project.append('button')
+        .attr('class', 'dropdown-button');
+      
+      Button.append('i')
+        .attr('class', 'fas fa-angle-down');
+
+      let ProjectName = Project.append('p')
+        .text(d.project.name)
+        .attr('class','project-name')
+
+      let ProjectPhase = Project.append('div')
+        .attr('class', 'project-phase');
+
+      ProjectPhase.append('p')
+        .text(d.project.phase)
+        .attr('class','project-phase-para')
+    })
+  }
 
   //Returns months between given date ranges
   getMonths(startDate: string, endDate: string) {

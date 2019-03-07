@@ -65,7 +65,7 @@ let data = [
     {
       project: {
         name: 'Solid Waste',
-        phase: 'Implementation'
+        phase: 'Execution'
       },
       milestones: [
         {
