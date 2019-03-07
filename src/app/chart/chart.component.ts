@@ -57,18 +57,16 @@ export class ChartComponent implements OnInit {
     this.GlobalEndDate = config.data[0].milestones[0].tasks[0].end_date;
     this.GlobalStartDate = config.data[0].milestones[0].tasks[0].start_date
     this.processMilestones(config.data);
-
-    //Create Blocks and helper data
+    console.log(config.data);
+    //Create Blocks
     this.createBlocks();
+
+    //Generate Helper data for Chart
     this.Months = this.getMonths(this.GlobalStartDate, this.GlobalEndDate);
     this.DrawAreaSvgWidth = this.Months.length * 50;
     this.SubHeaderRanges = this.getMonthsRange();
-    console.log(this.Months);
     this.DateBoundary.push(moment(this.Months[0], 'MMM YYYY').startOf('month').toDate());
     this.DateBoundary.push(moment(this.Months[this.Months.length - 1], 'MMM YYYY').endOf('month').toDate());
-
-    // //Give 50 width to every month block
-    // this.CalendarWidth = this.Months.length * 50;
 
     //Create time scale for x axis
     this.x = d3.time.scale()
@@ -174,7 +172,6 @@ export class ChartComponent implements OnInit {
   appendProjects() {
     config.data.forEach( (d,i) => {
       let index = i;
-      console.log(d);
       let Project = this.ProjectsWrapper
         .append('div')
         .attr('class', 'project');
@@ -197,13 +194,47 @@ export class ChartComponent implements OnInit {
         .attr('class','project-phase-para');
       
       d.milestones.forEach( (d, i) => {
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-          .attr('rx', '5px')
-          .attr("width", this.getWidth(d) )
-          .attr("height", "4vh")
-          .attr('class', 'milestones')
+        if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
+          this.DrawAreaSvg.append('rect')
+            .attr('x', this.x(new Date(d.start_date)))
+            .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+            .attr('rx', '5px')
+            .attr("width", this.getWidth(d) )
+            .attr("height", "4vh")
+            .attr('class', 'milestones')
+        } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
+          if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
+            this.DrawAreaSvg.append('rect')
+              .attr('x', this.x(new Date(d.start_date)))
+              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+              .attr('rx', '5px')
+              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+              .attr("height", "4vh")
+              .attr('class', 'milestones')
+            this.DrawAreaSvg.append('rect')
+              .attr('x', this.x(new Date(d.start_date)))
+              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+              .attr('rx', '5px')
+              .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
+              .attr("height", "4vh")
+              .attr('class', 'milestones-pending')
+          } else {
+            this.DrawAreaSvg.append('rect')
+              .attr('x', this.x(new Date(d.start_date)))
+              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+              .attr('rx', '5px')
+              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+              .attr("height", "4vh")
+              .attr('class', 'milestones')
+            this.DrawAreaSvg.append('rect')
+              .attr('x', this.x(new Date(d.start_date)))
+              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+              .attr('rx', '5px')
+              .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
+              .attr("height", "4vh")
+              .attr('class', 'milestones-late')
+          }
+        }
       })
     })
   }
@@ -271,11 +302,12 @@ export class ChartComponent implements OnInit {
             let endDate = milestone.tasks[0].end_date;
             let tasksCompleted = startDate;
 
-            for(let i=1; i<milestone.tasks.length; i++) {
+            for(let i=0; i<milestone.tasks.length; i++) {
                 const mStartDate = new Date(milestone.tasks[i].start_date);
                 const mEndDate = new Date(milestone.tasks[i].end_date);
                 const currentStartDate = new Date(startDate);
                 const currentEndDate = new Date(endDate);
+                
                 if(new Date(this.GlobalStartDate) > mStartDate) {
                     this.GlobalStartDate = milestone.tasks[i].start_date 
                 }

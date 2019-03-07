@@ -107,3 +107,11 @@
 .milestones {
     fill: #3EA66C;
 }
+
+.milestones-pending {
+    fill: rgb(62,166,108,0.16);
+}
+
+.milestones-late {
+    fill: #DE3C3F;
+}

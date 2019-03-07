@@ -18,9 +18,9 @@ let data = [
             },
             {
               name: 'Task 2',
-              start_date: "02/07/2019", 
+              start_date: "03/07/2019", 
               end_date: "06/09/2019",
-              isCompleted: true
+              isCompleted: false
             },
           ]
         },
@@ -43,7 +43,7 @@ let data = [
           ]
         },
         {
-          name: 'Milestone 2',
+          name: 'Milestone 3',
           meta: 'Some details about milestone',
           tasks: [
             {
@@ -56,7 +56,7 @@ let data = [
               name: 'Task 5',
               start_date: "11/07/2020", 
               end_date: "01/09/2021",
-              isCompleted: true
+              isCompleted: false
             },
           ]
         },
