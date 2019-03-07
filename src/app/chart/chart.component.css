@@ -20,7 +20,6 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: bisque;
 }
 
 .search-box {
@@ -75,7 +74,7 @@
     font-size: 0.65rem;
     font-weight: 500;
     margin-top: 1.0rem;
-    margin-right: 1.5rem;
+    margin-right: 1.0rem;
     color: white;
     background-color: #88959F;
     border-radius: 3px;
@@ -95,4 +94,16 @@
     fill: #7E8A95;
     font-size: 0.7rem;
     text-transform: uppercase;
+}
+
+.current-day-line {
+    stroke: #5A5A5A;
+}
+
+.current-day-circle {
+    fill: #5A5A5A
+}
+
+.milestones {
+    fill: #3EA66C;
 }
