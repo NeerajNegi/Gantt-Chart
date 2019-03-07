@@ -3,14 +3,12 @@
     height: 80vh;
     display: grid;
     grid-template-columns: 30% 70%;
-    grid-gap: 0.5rem;
 }
 
 .menu {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-gap: 0.5rem;
     grid-template-rows: 10% 90%;
 }
 
@@ -43,4 +41,17 @@
 
 .project {
     width: 100%;
+}
+
+/* Charts SVG */
+
+.calendar {
+    fill: white;
+    stroke-opacity: 0;
+}
+
+.dates {
+    fill: #7E8A95;
+    font-size: 0.7rem;
+    text-transform: uppercase;
 }
