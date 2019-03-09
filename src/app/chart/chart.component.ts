@@ -50,8 +50,6 @@ export class ChartComponent implements OnInit {
     this.ChartHeight = this.Chart[0][0].offsetHeight;
     this.ChartWidth = this.Chart[0][0].offsetWidth;
     this.DrawAreaSvgHeight = 500;
-    //Change this DrawAreaSvgWidth according to Months length
-    // this.DrawAreaSvgWidth = 1000;
     
     //Pre-process data
     this.GlobalEndDate = config.data[0].milestones[0].tasks[0].end_date;
@@ -225,54 +223,7 @@ export class ChartComponent implements OnInit {
       });
       
       d.milestones.forEach( (d, i) => {
-        //use this to round corners  '   .attr('rx', '5px')   '
-        if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
-          //if milestone is finished in time
-          this.DrawAreaSvg.append('rect')
-            .attr('x', this.x(new Date(d.start_date)))
-            .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-            .attr("width", this.getWidth(d) )
-            .attr("height", "4vh")
-            .attr('class', 'milestones')
-        } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
-          if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
-            //if milestone is still in progress with some time left
-            this.DrawAreaSvg.append('rect')
-              .attr('x', this.x(new Date(d.start_date)))
-              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-              .attr("height", "4vh")
-              .attr('class', 'milestones')
-            this.DrawAreaSvg.append('rect')
-              .attr('x', this.x(new Date(d.finishedTasksDate)))
-              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-              .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
-              .attr("height", "4vh")
-              .attr('class', 'milestones-pending')
-          } else {
-            //if milestone is still in progress and crosses deadline
-            this.DrawAreaSvg.append('rect')
-              .attr('x', this.x(new Date(d.start_date)))
-              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-              .attr("height", "4vh")
-              .attr('class', 'milestones')
-            this.DrawAreaSvg.append('rect')
-              .attr('x', this.x(new Date(d.finishedTasksDate)))
-              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-              .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
-              .attr("height", "4vh")
-              .attr('class', 'milestones-late')
-          }
-        } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
-            //if milestone is yet to be started
-            this.DrawAreaSvg.append('rect')
-              .attr('x', this.x(new Date(d.start_date)))
-              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-              .attr("height", "4vh")
-              .attr('class', 'milestones-not-started')
-        }
+        this.appendMilestoneBars(d, index);
       })
     })
   }
@@ -327,6 +278,57 @@ export class ChartComponent implements OnInit {
 
       });
       return ranges;
+  }
+
+  appendMilestoneBars(d, index) {
+    //use this to round corners  '   .attr('rx', '5px')   '
+    if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
+      //if milestone is finished in time
+      this.DrawAreaSvg.append('rect')
+        .attr('x', this.x(new Date(d.start_date)))
+        .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+        .attr("width", this.getWidth(d) )
+        .attr("height", "4vh")
+        .attr('class', 'milestones')
+    } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
+      if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
+        //if milestone is still in progress with some time left
+        this.DrawAreaSvg.append('rect')
+          .attr('x', this.x(new Date(d.start_date)))
+          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+          .attr("height", "4vh")
+          .attr('class', 'milestones')
+        this.DrawAreaSvg.append('rect')
+          .attr('x', this.x(new Date(d.finishedTasksDate)))
+          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
+          .attr("height", "4vh")
+          .attr('class', 'milestones-pending')
+      } else {
+        //if milestone is still in progress and crosses deadline
+        this.DrawAreaSvg.append('rect')
+          .attr('x', this.x(new Date(d.start_date)))
+          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+          .attr("height", "4vh")
+          .attr('class', 'milestones')
+        this.DrawAreaSvg.append('rect')
+          .attr('x', this.x(new Date(d.finishedTasksDate)))
+          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
+          .attr("height", "4vh")
+          .attr('class', 'milestones-late')
+      }
+    } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
+        //if milestone is yet to be started
+        this.DrawAreaSvg.append('rect')
+          .attr('x', this.x(new Date(d.start_date)))
+          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+          .attr("height", "4vh")
+          .attr('class', 'milestones-not-started')
+    }
   }
   
   //Procss Data to get Global start and end dates
