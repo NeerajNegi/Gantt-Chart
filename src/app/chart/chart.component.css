@@ -116,3 +116,7 @@
 .milestones-late {
     fill: #DE3C3F;
 }
+
+.milestones-not-started{
+    fill: rgba(25, 151, 252, 0.16);
+}

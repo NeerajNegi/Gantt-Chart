@@ -227,6 +227,7 @@ export class ChartComponent implements OnInit {
       d.milestones.forEach( (d, i) => {
         //use this to round corners  '   .attr('rx', '5px')   '
         if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
+          //if milestone is finished in time
           this.DrawAreaSvg.append('rect')
             .attr('x', this.x(new Date(d.start_date)))
             .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
@@ -235,6 +236,7 @@ export class ChartComponent implements OnInit {
             .attr('class', 'milestones')
         } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
           if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
+            //if milestone is still in progress with some time left
             this.DrawAreaSvg.append('rect')
               .attr('x', this.x(new Date(d.start_date)))
               .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
@@ -248,6 +250,7 @@ export class ChartComponent implements OnInit {
               .attr("height", "4vh")
               .attr('class', 'milestones-pending')
           } else {
+            //if milestone is still in progress and crosses deadline
             this.DrawAreaSvg.append('rect')
               .attr('x', this.x(new Date(d.start_date)))
               .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
@@ -261,6 +264,14 @@ export class ChartComponent implements OnInit {
               .attr("height", "4vh")
               .attr('class', 'milestones-late')
           }
+        } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
+            //if milestone is yet to be started
+            this.DrawAreaSvg.append('rect')
+              .attr('x', this.x(new Date(d.start_date)))
+              .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+              .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
+              .attr("height", "4vh")
+              .attr('class', 'milestones-not-started')
         }
       })
     })
