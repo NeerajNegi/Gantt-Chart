@@ -3,7 +3,9 @@ let data = [
     {
       project: {
         name: 'Waste Management',
-        phase: 'Implementation'
+        phase: 'Implementation',
+        isOpen: false,
+        id: 1
       },
       milestones: [
         {
@@ -65,7 +67,9 @@ let data = [
     {
       project: {
         name: 'Solid Waste',
-        phase: 'Execution'
+        phase: 'Execution',
+        isOpen: false,
+        id: 2
       },
       milestones: [
         {

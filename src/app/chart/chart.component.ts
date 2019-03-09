@@ -177,7 +177,8 @@ export class ChartComponent implements OnInit {
         .attr('class', 'project');
       
       let Button = Project.append('button')
-        .attr('class', 'dropdown-button');
+        .attr('class', 'dropdown-button')
+        .attr('id', 'project-' + d.project.id);
       
       Button.append('i')
         .attr('class', 'fas fa-angle-down');
@@ -192,6 +193,36 @@ export class ChartComponent implements OnInit {
       ProjectPhase.append('p')
         .text(d.project.phase)
         .attr('class','project-phase-para');
+      
+      let tasksWrapper = Project.append('div')
+        .attr('class', 'tasks-wrapper')
+        .attr('id', 'tasks-wrapper-' + d.project.id);
+      
+      Button.on('click', function() {
+        console.log(d.project.isOpen);
+        if(!d.project.isOpen) {          
+          d3.selectAll('.task').remove();
+          config.data.forEach((d) => {
+            if(d.project.isOpen)
+              d.project.isOpen = false;
+          })
+          d.project.isOpen = true;
+          d.milestones.forEach( (m, i) => {
+            m['tasks'].forEach((t, i) => {
+              let task = tasksWrapper.append('div')
+                .attr('class', 'task')
+                .attr('id', 'task-' + d.project.id);
+              
+              task.append('p')
+                .text(t.name);
+            })
+          })
+        } else {
+          d.project.isOpen = false;
+          d3.selectAll('.task').remove();
+
+        }
+      });
       
       d.milestones.forEach( (d, i) => {
         //use this to round corners  '   .attr('rx', '5px')   '
