@@ -34,6 +34,7 @@ export class ChartComponent implements OnInit {
   SubHeaderRanges: Array<any> = [];
   GlobalStartDate: string;
   GlobalEndDate: string;
+  ViewportHeight: number;
 
   //Time scale
   x: any;
@@ -42,6 +43,8 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
     //Initialize
+    this.ViewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    console.log(this.ViewportHeight);
     this.CurrentDay = {
       start_date: moment().startOf('day').toDate(),
       end_date: moment().endOf('day').toDate(),
@@ -100,13 +103,12 @@ export class ChartComponent implements OnInit {
       .append('div')
       .attr('class', 'draw-area');
     
-    this.DrawAreaSvgHeight =  this.DrawArea[0][0].offsetHeight;
-    
     this.SearchBox = this.Menu
       .append('div')
       .attr('class', 'search-box');
 
     this.CalendarHeight = this.SearchBox[0][0].offsetHeight;
+    this.DrawAreaSvgHeight =  this.CalendarHeight + (config.data.length * (6.77*((1/100)*this.ViewportHeight)));
     
     //Projects-Wrapper will contain all the projects
     this.ProjectsWrapper = this.Menu
@@ -196,8 +198,7 @@ export class ChartComponent implements OnInit {
         .attr('class', 'tasks-wrapper')
         .attr('id', 'tasks-wrapper-' + d.project.id);
       
-      Button.on('click', function() {
-        console.log(d.project.isOpen);
+      Button.on('click', function() {        
         if(!d.project.isOpen) {          
           d3.selectAll('.task').remove();
           config.data.forEach((d) => {
@@ -218,12 +219,11 @@ export class ChartComponent implements OnInit {
         } else {
           d.project.isOpen = false;
           d3.selectAll('.task').remove();
-
         }
       });
-      
+      let project = d;
       d.milestones.forEach( (d, i) => {
-        this.appendMilestoneBars(d, index);
+        this.appendMilestoneBars(d, index, project);
       })
     })
   }
@@ -280,45 +280,50 @@ export class ChartComponent implements OnInit {
       return ranges;
   }
 
-  appendMilestoneBars(d, index) {
+  appendMilestoneBars(d, index, project) {
+    const projectHeight = 1/100 * this.ViewportHeight * 6.77;
     //use this to round corners  '   .attr('rx', '5px')   '
     if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
       //if milestone is finished in time
       this.DrawAreaSvg.append('rect')
         .attr('x', this.x(new Date(d.start_date)))
-        .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+        // .attr('y', (projectHeight*index) + this.CalendarHeight + 1)
+        .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
         .attr("width", this.getWidth(d) )
         .attr("height", "4vh")
-        .attr('class', 'milestones')
+        .attr('class', 'milestones' )
+        // .on('mouseover',function() {
+        //   console.log(d);
+        // })
     } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
       if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
         //if milestone is still in progress with some time left
         this.DrawAreaSvg.append('rect')
           .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
           .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
           .attr("height", "4vh")
-          .attr('class', 'milestones')
+          .attr('class', 'milestones ' )
         this.DrawAreaSvg.append('rect')
           .attr('x', this.x(new Date(d.finishedTasksDate)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
           .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
           .attr("height", "4vh")
-          .attr('class', 'milestones-pending')
+          .attr('class', 'milestones pending ')
       } else {
         //if milestone is still in progress and crosses deadline
         this.DrawAreaSvg.append('rect')
           .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
           .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
           .attr("height", "4vh")
           .attr('class', 'milestones')
         this.DrawAreaSvg.append('rect')
           .attr('x', this.x(new Date(d.finishedTasksDate)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
+          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
           .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
           .attr("height", "4vh")
-          .attr('class', 'milestones-late')
+          .attr('class', 'milestones late ')
       }
     } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
         //if milestone is yet to be started
@@ -327,7 +332,7 @@ export class ChartComponent implements OnInit {
           .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
           .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
           .attr("height", "4vh")
-          .attr('class', 'milestones-not-started')
+          .attr('class', 'milestones not-started ')
     }
   }
   
