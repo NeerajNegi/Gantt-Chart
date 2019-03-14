@@ -27,6 +27,7 @@ export class ChartComponent implements OnInit {
   DrawAreaSvgWidth: number;
   DrawAreaSvgHeight: number;
   CurrentDay: any;
+  Svg: any;
 
   //Variables for Chart helper data
   Months: Array<any> = [];
@@ -79,17 +80,17 @@ export class ChartComponent implements OnInit {
     this.appendProjects();
 
     //Current day line
-    const currentDayLine = this.DrawAreaSvg.append('line')
+    const currentDayLine = this.Svg.append('line')
       .attr('x1', this.x(new Date(this.CurrentDay.start_date)))
       .attr('x2', this.x(new Date(this.CurrentDay.start_date)))
-      .attr('y1', this.CalendarHeight + 2)
+      .attr('y1', 0)
       .attr('y2', this.DrawAreaSvgHeight)
       .attr('class', 'current-day-line')
     
     //Current day circle
-    const currentDayCircle = this.DrawAreaSvg.append('circle')
+    const currentDayCircle = this.Svg.append('circle')
       .attr('cx', this.x(new Date(this.CurrentDay.start_date)))
-      .attr('cy', this.CalendarHeight + 2)
+      .attr('cy', 2)
       .attr('r', '5px')
       .attr('class', 'current-day-circle');
   }
@@ -127,10 +128,11 @@ export class ChartComponent implements OnInit {
     //Draw Area Svg is where gantt chart rectangles will be drawn
     //Draw Area Svg will also contain calendar with dates at the top
     //Keeping calendar and rectangles in single svg will make it easily scrollable in x-axis
-    this.DrawAreaSvg  = this.DrawArea
+    this.DrawAreaSvg  = this.DrawArea.append('div')
+      .attr('class', 'calendar')
       .append('svg')
       .attr('width', this.DrawAreaSvgWidth)
-      .attr('height', this.DrawAreaSvgHeight);
+      .attr('height', this.CalendarHeight);
     
     this.Calendar = this.DrawAreaSvg
       .append('rect')
@@ -159,13 +161,22 @@ export class ChartComponent implements OnInit {
     });
 
 
+    this.Svg = this.DrawArea.append('svg')
+      .attr('width', this.DrawAreaSvgWidth)
+      .attr('height', this.DrawAreaSvgHeight)
+      .style('position','absolute')
+      .style('top', this.CalendarHeight)
     //append border line for calendar
-    this.DrawAreaSvg.append('line')
+    this.Svg.append('line')
       .attr('stroke', '#E8EFFD')
       .attr('x1', this.x(new Date(this.DateBoundary[0])))
-      .attr('y1', this.CalendarHeight + 2)
+      .attr('y1', 0)
       .attr('x2', this.x(new Date(this.DateBoundary[1])))
-      .attr('y2', this.CalendarHeight);
+      .attr('y2', 0);
+    
+    this.DrawArea.append('div')
+      .attr('class', 'bars-wrapper');
+    
 
   }
 
@@ -197,7 +208,11 @@ export class ChartComponent implements OnInit {
       let tasksWrapper = Project.append('div')
         .attr('class', 'tasks-wrapper')
         .attr('id', 'tasks-wrapper-' + d.project.id);
-      
+
+      let das = this.DrawAreaSvg;
+      let x = this.x;
+      let ch = this.CalendarHeight
+
       Button.on('click', function() {        
         if(!d.project.isOpen) {          
           d3.selectAll('.task').remove();
@@ -214,6 +229,15 @@ export class ChartComponent implements OnInit {
               
               task.append('p')
                 .text(t.name);
+              
+              // const projectHeight = 1/100 * this.ViewportHeight * 6.77;
+              // das.append('rect')
+              //   .attr('x', x(new Date(m.start_date)))
+              //   .attr('y', (projectHeight*index) + ch + 10)
+              //   .attr("width", Math.abs(x(new Date(m.end_date)) - x(new Date(m.start_date))) )
+              //   .attr("height", "2vh")
+              //   .attr('class', 'tasks ' )
+              
             })
           })
         } else {
@@ -225,6 +249,11 @@ export class ChartComponent implements OnInit {
       d.milestones.forEach( (d, i) => {
         this.appendMilestoneBars(d, index, project);
       })
+
+      d3.selectAll('.milestones')
+        .on('click', function() {
+          console.log(this);
+        })
     })
   }
 
