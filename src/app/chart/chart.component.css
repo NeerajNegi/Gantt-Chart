@@ -126,42 +126,68 @@
     fill: #5A5A5A
 }
 
-.milestones {
+/* .milestones {
     fill: #3EA66C;
     cursor: pointer;
+} */
+
+
+.project-bars-wrapper {
+    width: 100%;
+}
+
+.milestones-bars-wrapper {
+    width: 100%;
+    height: 6.77vh;
+    position: relative;
+}
+
+.tasks-bars-wrapper {
+    display: none;
+    height: 20vh;
+    width: 100%;
+}
+
+.milestones {
+    position: absolute;    
+    height: 4vh;
+    background-color:  #3EA66C;
+    top: 15%;
+    cursor: pointer;
+}
+
+.task-bar {
+    top: 15%;
+    position: absolute;
+    background-color: #3EA66C; 
+    height: 2vh;
+    cursor: pointer;
+    margin: 0px;
 }
 
 .pending {
-    fill: rgb(62,166,108,0.16);
-    cursor: pointer;
+    background-color: rgb(62,166,108,0.16);
 }
 
 .late {
-    fill: #DE3C3F;
-    cursor: pointer;
+    background-color: #DE3C3F;
 }
 
 .not-started{
-    fill: rgba(25, 151, 252, 0.16);
-    cursor: pointer;
+    background-color: rgba(25, 151, 252, 0.16);
 }
 
 .tasks-wrapper {
     background-color: #E9ECF4;
 }
 
-.task {
-    margin-left: 2.0rem;
+.task-wrapper {
+    width: 100%;
+    height: 3vh;
+    position: relative;
 }
-
-.tasks {
-    fill: #3EA66C;
-    cursor: pointer;
-}
-
 
 .bars-wrapper {
     width: 100%;
-    height: 50vh;
-    background-color: greenyellow;
+    /* background-color: greenyellow; */
 }

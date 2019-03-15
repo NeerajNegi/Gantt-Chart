@@ -28,6 +28,7 @@ export class ChartComponent implements OnInit {
   DrawAreaSvgHeight: number;
   CurrentDay: any;
   Svg: any;
+  BarsWrapper: any;
 
   //Variables for Chart helper data
   Months: Array<any> = [];
@@ -81,15 +82,18 @@ export class ChartComponent implements OnInit {
 
     //Current day line
     const currentDayLine = this.Svg.append('line')
-      .attr('x1', this.x(new Date(this.CurrentDay.start_date)))
-      .attr('x2', this.x(new Date(this.CurrentDay.start_date)))
+      // .attr('x1', this.x(new Date(this.CurrentDay.start_date)))
+      // .attr('x2', this.x(new Date(this.CurrentDay.start_date)))
+      .attr('x1', 5)
+      .attr('x2', 5)
       .attr('y1', 0)
       .attr('y2', this.DrawAreaSvgHeight)
       .attr('class', 'current-day-line')
     
     //Current day circle
     const currentDayCircle = this.Svg.append('circle')
-      .attr('cx', this.x(new Date(this.CurrentDay.start_date)))
+      // .attr('cx', this.x(new Date(this.CurrentDay.start_date)))
+      .attr('cx', 5)
       .attr('cy', 2)
       .attr('r', '5px')
       .attr('class', 'current-day-circle');
@@ -159,24 +163,27 @@ export class ChartComponent implements OnInit {
       .attr('class', function(d) {
         return "dates Date-" + moment(d.start_date).format("MMYYYY")
     });
+    
+    this.BarsWrapper = this.DrawArea.append('div')
+      .attr('class', 'bars-wrapper');
 
-
+    //Calendar SVG
     this.Svg = this.DrawArea.append('svg')
-      .attr('width', this.DrawAreaSvgWidth)
+      .attr('width', 10)
       .attr('height', this.DrawAreaSvgHeight)
       .style('position','absolute')
+      .style('left', this.x(new Date(this.CurrentDay.start_date))-5)
       .style('top', this.CalendarHeight)
+      .attr('id', 'draw-svg')
+
     //append border line for calendar
-    this.Svg.append('line')
-      .attr('stroke', '#E8EFFD')
-      .attr('x1', this.x(new Date(this.DateBoundary[0])))
-      .attr('y1', 0)
-      .attr('x2', this.x(new Date(this.DateBoundary[1])))
-      .attr('y2', 0);
-    
-    this.DrawArea.append('div')
-      .attr('class', 'bars-wrapper');
-    
+    // this.Svg.append('line')
+    //   .attr('stroke', '#E8EFFD')
+    //   .attr('x1', this.x(new Date(this.DateBoundary[0])))
+    //   .attr('y1', 0)
+    //   .attr('x2', this.x(new Date(this.DateBoundary[1])))
+    //   .attr('y2', 0)
+    //   .attr('id','drawarealine');
 
   }
 
@@ -246,8 +253,24 @@ export class ChartComponent implements OnInit {
         }
       });
       let project = d;
+      
+      let projectBarsWrapper = this.BarsWrapper.append('div')
+        .attr('class', 'project-bars-wrapper')
+        .attr('id', 'project-bars-wrapper' + project.project.id);
+
+      let projectMilestoneWrapper = projectBarsWrapper.append('div')
+        .attr('class', 'milestones-bars-wrapper')
+        .attr('id', 'milestones-wrapper-' + project.project.id);
+      
+      let projectTaskWrapper = projectBarsWrapper.append('div')
+        .attr('class', 'tasks-bars-wrapper')
+        .attr('id', 'tasks-wrapper-' + project.project.id)
+
       d.milestones.forEach( (d, i) => {
-        this.appendMilestoneBars(d, index, project);
+        this.appendMilestoneBars(d, index, project, projectMilestoneWrapper);
+        // d.tasks.forEach((t, i) => {
+        //   this.appendTasks(t, index, project, projectTaskWrapper);
+        // })
       })
 
       d3.selectAll('.milestones')
@@ -309,60 +332,63 @@ export class ChartComponent implements OnInit {
       return ranges;
   }
 
-  appendMilestoneBars(d, index, project) {
+  appendMilestoneBars(d, index, project, wrapper) {
     const projectHeight = 1/100 * this.ViewportHeight * 6.77;
     //use this to round corners  '   .attr('rx', '5px')   '
     if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
-      //if milestone is finished in time
-      this.DrawAreaSvg.append('rect')
-        .attr('x', this.x(new Date(d.start_date)))
-        // .attr('y', (projectHeight*index) + this.CalendarHeight + 1)
-        .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
-        .attr("width", this.getWidth(d) )
-        .attr("height", "4vh")
-        .attr('class', 'milestones' )
-        // .on('mouseover',function() {
-        //   console.log(d);
-        // })
+        wrapper.append('div')
+          .attr('class', 'milestones')
+          .style('left', this.x(new Date(d.start_date)))
+          .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.start_date)) + 'px')
     } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
       if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
-        //if milestone is still in progress with some time left
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
-          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-          .attr("height", "4vh")
-          .attr('class', 'milestones ' )
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.finishedTasksDate)))
-          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
-          .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
-          .attr("height", "4vh")
-          .attr('class', 'milestones pending ')
-      } else {
-        //if milestone is still in progress and crosses deadline
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
-          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-          .attr("height", "4vh")
+        wrapper.append('div')
           .attr('class', 'milestones')
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.finishedTasksDate)))
-          .attr('y', (projectHeight*index) + this.CalendarHeight + 10)
-          .attr("width", Math.abs(this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate))) )
-          .attr("height", "4vh")
+          .style('left', this.x(new Date(d.start_date)) + 'px')
+          .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
+        wrapper.append('div')
+          .attr('class', 'milestones pending ')
+          .style('left', this.x(new Date(d.finishedTasksDate))  + 'px')
+          .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate)) + 'px')
+      } else {
+        wrapper.append('div')
+          .attr('class', 'milestones')
+          .style('left', this.x(new Date(d.start_date))  + 'px')
+          .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
+        wrapper.append('div')
           .attr('class', 'milestones late ')
+          .style('left', this.x(new Date(d.finishedTasksDate))  + 'px')
+          .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate)) + 'px')
       }
     } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
-        //if milestone is yet to be started
-        this.DrawAreaSvg.append('rect')
-          .attr('x', this.x(new Date(d.start_date)))
-          .attr('y', ((6.77*index) + 8.34 + 1)+ 'vh')
-          .attr("width", Math.abs(this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date))) )
-          .attr("height", "4vh")
-          .attr('class', 'milestones not-started ')
+        wrapper.append('div')
+          .attr('class', 'milestones not-started')
+          .style('left', this.x(new Date(d.start_date)) + 'px')
+          .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
     }
+  }
+
+  appendTasks(t, index, project, wrapper) {
+    // console.log(this.x(new Date(t.start_date)));
+    // console.log(t.start_date);
+    let taskClass = '';
+    let w = wrapper.append('div')
+      .attr('class', 'task-wrapper');
+    if(t.isCompleted) {
+      taskClass = 'task-bar';
+    } else if( new Date(t.end_date).getTime() > new Date().getTime()) {
+      taskClass = 'task-bar not-started';
+    } else if(new Date(t.end_date).getTime() < new Date().getTime()) {
+      taskClass = 'task-bar late';
+    }
+    w.append('div')
+        .attr('class', taskClass)
+        .style('left' , this.x(new Date(t.start_date)) + 'px')
+        .style('width', this.x(new Date(t.end_date)) - this.x(new Date(t.start_date)) + 'px')
+        .on('click', () => {
+          console.log('task', t);
+          console.log('project', project);
+        });
   }
   
   //Procss Data to get Global start and end dates

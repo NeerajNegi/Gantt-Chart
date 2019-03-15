@@ -14,7 +14,7 @@ let data = [
           tasks: [
             {
               name: 'Task 1',
-              start_date: "01/08/2019", 
+              start_date: "01/01/2019", 
               end_date: "02/09/2019",
               isCompleted: true
             },
