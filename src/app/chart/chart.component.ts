@@ -238,10 +238,18 @@ export class ChartComponent implements OnInit {
               
               task.append('input')
                 .attr('type', 'checkbox')
+                .property('checked', function() {
+                  if(t.isCompleted) {
+                    return true
+                  } else {
+                    return false;
+                  }
+                })
                 .attr('id', 'tast-checkbox')
                 .attr('class', 'task-checkbox')
                 .on('change', function() {
                   // console.log(t.name + ' is checked');
+                  t.isCompleted = !t.isCompleted;
                 })
 
               task.append('p')
