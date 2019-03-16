@@ -115,7 +115,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 3
       },
       milestones: [
         {
@@ -179,118 +179,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
-      },
-      milestones: [
-        {
-          name: 'Milestone 1',
-          meta: 'Some details about milestone',
-          tasks: [
-            {
-              name: 'Task 1',
-              start_date: "01/08/2019", 
-              end_date: "02/09/2019",
-              isCompleted: true
-            },
-            {
-              name: 'Task 2',
-              start_date: "03/07/2019", 
-              end_date: "06/09/2019",
-              isCompleted: false
-            },
-          ]
-        },
-        {
-          name: 'Milestone 2',
-          meta: 'Some details about milestone',
-          tasks: [
-            {
-              name: 'Task 3',
-              start_date: "09/08/2019", 
-              end_date: "10/09/2019",
-              isCompleted: true
-            },
-            {
-              name: 'Task 5',
-              start_date: "11/07/2019", 
-              end_date: "01/09/2020",
-              isCompleted: true
-            },
-          ]
-        },
-        {
-          name: 'Milestone 3',
-          meta: 'Some details about milestone',
-          tasks: [
-            {
-              name: 'Task 3',
-              start_date: "09/08/2020", 
-              end_date: "10/09/2020",
-              isCompleted: true
-            },
-            {
-              name: 'Task 5',
-              start_date: "11/07/2020", 
-              end_date: "01/09/2021",
-              isCompleted: false
-            },
-          ]
-        },
-      ]
-    }, 
-    
-    {
-      project: {
-        name: 'Solid Waste',
-        phase: 'Execution',
-        isOpen: false,
-        id: 2
-      },
-      milestones: [
-        {
-          name: 'Milestone 1',
-          meta: 'Some details about milestone',
-          tasks: [
-            {
-              name: 'Task 1',
-              start_date: "01/01/2019", 
-              end_date: "01/25/2019",
-              isCompleted: false
-            },
-            {
-              name: 'Task 2',
-              start_date: "02/07/2019", 
-              end_date: "04/09/2019",
-              isCompleted: false
-            },
-          ]
-        },
-        {
-          name: 'Milestone 2',
-          meta: 'Some details about milestone',
-          tasks: [
-            {
-              name: 'Task 4',
-              start_date: "05/01/2019", 
-              end_date: "07/09/2019",
-              isCompleted: true
-            },
-            {
-              name: 'Task 5',
-              start_date: "09/07/2019", 
-              end_date: "11/09/2019",
-              isCompleted: true
-            },
-          ]
-        },
-      ]
-    },
-    {
-      project: {
-        name: 'Waste Management',
-        phase: 'Implementation',
-        isOpen: false,
-        id: 1
+        id: 4
       },
       milestones: [
         {
@@ -355,7 +244,118 @@ let data = [
         name: 'Solid Waste',
         phase: 'Execution',
         isOpen: false,
-        id: 2
+        id: 5
+      },
+      milestones: [
+        {
+          name: 'Milestone 1',
+          meta: 'Some details about milestone',
+          tasks: [
+            {
+              name: 'Task 1',
+              start_date: "01/01/2019", 
+              end_date: "01/25/2019",
+              isCompleted: false
+            },
+            {
+              name: 'Task 2',
+              start_date: "02/07/2019", 
+              end_date: "04/09/2019",
+              isCompleted: false
+            },
+          ]
+        },
+        {
+          name: 'Milestone 2',
+          meta: 'Some details about milestone',
+          tasks: [
+            {
+              name: 'Task 4',
+              start_date: "05/01/2019", 
+              end_date: "07/09/2019",
+              isCompleted: true
+            },
+            {
+              name: 'Task 5',
+              start_date: "09/07/2019", 
+              end_date: "11/09/2019",
+              isCompleted: true
+            },
+          ]
+        },
+      ]
+    },
+    {
+      project: {
+        name: 'Waste Management',
+        phase: 'Implementation',
+        isOpen: false,
+        id: 6
+      },
+      milestones: [
+        {
+          name: 'Milestone 1',
+          meta: 'Some details about milestone',
+          tasks: [
+            {
+              name: 'Task 1',
+              start_date: "01/08/2019", 
+              end_date: "02/09/2019",
+              isCompleted: true
+            },
+            {
+              name: 'Task 2',
+              start_date: "03/07/2019", 
+              end_date: "06/09/2019",
+              isCompleted: false
+            },
+          ]
+        },
+        {
+          name: 'Milestone 2',
+          meta: 'Some details about milestone',
+          tasks: [
+            {
+              name: 'Task 3',
+              start_date: "09/08/2019", 
+              end_date: "10/09/2019",
+              isCompleted: true
+            },
+            {
+              name: 'Task 5',
+              start_date: "11/07/2019", 
+              end_date: "01/09/2020",
+              isCompleted: true
+            },
+          ]
+        },
+        {
+          name: 'Milestone 3',
+          meta: 'Some details about milestone',
+          tasks: [
+            {
+              name: 'Task 3',
+              start_date: "09/08/2020", 
+              end_date: "10/09/2020",
+              isCompleted: true
+            },
+            {
+              name: 'Task 5',
+              start_date: "11/07/2020", 
+              end_date: "01/09/2021",
+              isCompleted: false
+            },
+          ]
+        },
+      ]
+    }, 
+    
+    {
+      project: {
+        name: 'Solid Waste',
+        phase: 'Execution',
+        isOpen: false,
+        id: 7
       },
       milestones: [
         {
@@ -401,7 +401,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 8
       },
       milestones: [
         {
@@ -465,7 +465,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 9
       },
       milestones: [
         {
@@ -529,7 +529,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 10
       },
       milestones: [
         {
@@ -593,7 +593,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 11
       },
       milestones: [
         {
@@ -657,7 +657,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 12
       },
       milestones: [
         {
@@ -721,7 +721,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 13
       },
       milestones: [
         {
@@ -785,7 +785,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 14
       },
       milestones: [
         {
@@ -848,7 +848,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 15
       },
       milestones: [
         {
@@ -911,7 +911,7 @@ let data = [
         name: 'Waste Management',
         phase: 'Implementation',
         isOpen: false,
-        id: 1
+        id: 16
       },
       milestones: [
         {

@@ -223,6 +223,8 @@ export class ChartComponent implements OnInit {
       Button.on('click', function() {        
         if(!d.project.isOpen) {          
           d3.selectAll('.task').remove();
+          d3.selectAll('.tasks-bars-wrapper')
+            .style('display', 'none');
           config.data.forEach((d) => {
             if(d.project.isOpen)
               d.project.isOpen = false;
@@ -243,13 +245,19 @@ export class ChartComponent implements OnInit {
               //   .attr('y', (projectHeight*index) + ch + 10)
               //   .attr("width", Math.abs(x(new Date(m.end_date)) - x(new Date(m.start_date))) )
               //   .attr("height", "2vh")
-              //   .attr('class', 'tasks ' )
+              //   .attr('class', 'tasks ')
               
             })
           })
+          console.log(d3.select('#tasks-bars-wrapper-' + project.project.id));
+          d3.select('#tasks-bars-wrapper-' + project.project.id)
+            .style('display', 'block');
+
         } else {
           d.project.isOpen = false;
           d3.selectAll('.task').remove();
+          d3.selectAll('.tasks-bars-wrapper')
+            .style('display', 'none');
         }
       });
       let project = d;
@@ -260,17 +268,17 @@ export class ChartComponent implements OnInit {
 
       let projectMilestoneWrapper = projectBarsWrapper.append('div')
         .attr('class', 'milestones-bars-wrapper')
-        .attr('id', 'milestones-wrapper-' + project.project.id);
+        .attr('id', 'milestones-bars-wrapper-' + project.project.id);
       
       let projectTaskWrapper = projectBarsWrapper.append('div')
         .attr('class', 'tasks-bars-wrapper')
-        .attr('id', 'tasks-wrapper-' + project.project.id)
+        .attr('id', 'tasks-bars-wrapper-' + project.project.id)
 
       d.milestones.forEach( (d, i) => {
         this.appendMilestoneBars(d, index, project, projectMilestoneWrapper);
-        // d.tasks.forEach((t, i) => {
-        //   this.appendTasks(t, index, project, projectTaskWrapper);
-        // })
+        d.tasks.forEach((t, i) => {
+          this.appendTasks(t, index, project, projectTaskWrapper);
+        })
       })
 
       d3.selectAll('.milestones')
