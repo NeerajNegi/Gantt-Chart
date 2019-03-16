@@ -281,10 +281,10 @@ export class ChartComponent implements OnInit {
         })
       })
 
-      d3.selectAll('.milestones')
-        .on('click', function() {
-          console.log(this);
-        })
+      // d3.selectAll('.milestones')
+      //   .on('click', function() {
+      //     console.log(this);
+      //   })
     })
   }
 
@@ -346,31 +346,40 @@ export class ChartComponent implements OnInit {
     if(new Date(d.finishedTasksDate).getTime() === new Date(d.end_date).getTime() ) {
         wrapper.append('div')
           .attr('class', 'milestones')
-          .style('left', this.x(new Date(d.start_date)))
+          .attr('id', 'm1')
+          .style('left', this.x(new Date(d.start_date)) + 'px')
           .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.start_date)) + 'px')
+          .on('click', function() {
+            console.log(d);
+          })
     } else if( new Date(d.finishedTasksDate).getTime() < new Date(d.end_date).getTime() ) {
       if( new Date(d.finishedTasksDate).getTime() > new Date().getTime()) {
         wrapper.append('div')
           .attr('class', 'milestones')
+          .attr('id', 'm2')
           .style('left', this.x(new Date(d.start_date)) + 'px')
           .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
         wrapper.append('div')
           .attr('class', 'milestones pending ')
+          .attr('id', 'm3')
           .style('left', this.x(new Date(d.finishedTasksDate))  + 'px')
           .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate)) + 'px')
       } else {
         wrapper.append('div')
           .attr('class', 'milestones')
+          .attr('id', 'm4')
           .style('left', this.x(new Date(d.start_date))  + 'px')
           .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
         wrapper.append('div')
           .attr('class', 'milestones late ')
+          .attr('id', 'm5')
           .style('left', this.x(new Date(d.finishedTasksDate))  + 'px')
           .style('width',  this.x(new Date(d.end_date)) - this.x(new Date(d.finishedTasksDate)) + 'px')
       }
     } else if(new Date(d.finishedTasksDate).getTime() === new Date(d.start_date).getTime()) {
         wrapper.append('div')
           .attr('class', 'milestones not-started')
+          .attr('id', 'm6')
           .style('left', this.x(new Date(d.start_date)) + 'px')
           .style('width',  this.x(new Date(d.finishedTasksDate)) - this.x(new Date(d.start_date)) + 'px')
     }

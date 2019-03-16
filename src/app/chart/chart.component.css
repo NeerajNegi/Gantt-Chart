@@ -154,6 +154,7 @@
     background-color:  #3EA66C;
     top: 15%;
     cursor: pointer;
+    /* border-radius: 5px; */
 }
 
 .task-bar {
@@ -163,6 +164,7 @@
     height: 2vh;
     cursor: pointer;
     margin: 0px;
+    border-radius: 8px;
 }
 
 .pending {
