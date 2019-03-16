@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import * as d3 from "d3";
 import * as moment from "moment";
+// import * as $ from 'jquery';
+// import * as f from 'floating-scroll';
 import { config } from './data.js';
 
 @Component({
@@ -97,6 +99,11 @@ export class ChartComponent implements OnInit {
       .attr('cy', 2)
       .attr('r', '5px')
       .attr('class', 'current-day-circle');
+
+    // $(document).ready(function(){
+    //   console.log('hello from jquery');
+    //   $(".draw-area").floatingScroll();
+    // });
   }
 
   createBlocks() {
@@ -106,7 +113,8 @@ export class ChartComponent implements OnInit {
     
     this.DrawArea = this.Chart
       .append('div')
-      .attr('class', 'draw-area');
+      .attr('class', 'draw-area')
+      .style('height', this.Chart[0][0].offsetHeight);
     
     this.SearchBox = this.Menu
       .append('div')
